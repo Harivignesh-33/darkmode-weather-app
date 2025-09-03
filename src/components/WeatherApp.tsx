@@ -52,7 +52,7 @@ export const WeatherApp = () => {
   const [error, setError] = useState<string | null>(null);
   const [city, setCity] = useState('');
 
-  const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
+  const API_KEY = 'd0a10016d43b599ee1b636c5cacf4354';
 
   const getWeatherIcon = (iconCode: string, className: string = "w-6 h-6") => {
     const iconMap: { [key: string]: JSX.Element } = {
