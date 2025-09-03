@@ -237,29 +237,61 @@ export const WeatherApp = () => {
             </div>
           )}
 
-          {/* 5-Day Forecast */}
+          {/* 5-Hour and 5-Day Forecast */}
           {forecast && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">5-Day Forecast</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                {forecast.list.slice(0, 5).map((item, index) => (
-                  <div key={index} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                      {new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}
+            <>
+              {/* 5-Hour Forecast */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">5-Hour Forecast</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {forecast.list.slice(0, 5).map((item, index) => (
+                    <div key={`hour-${index}`} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        {new Date(item.dt * 1000).toLocaleTimeString('en-US', { 
+                          hour: 'numeric', 
+                          hour12: true 
+                        })}
+                      </div>
+                      <div className="flex justify-center mb-2">
+                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
+                      </div>
+                      <div className="font-semibold text-gray-900 dark:text-white">
+                        {Math.round(item.main.temp)}°C
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                        {item.weather[0].description}
+                      </div>
                     </div>
-                    <div className="flex justify-center mb-2">
-                      {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
-                    </div>
-                    <div className="font-semibold text-gray-900 dark:text-white">
-                      {Math.round(item.main.temp)}°C
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                      {item.weather[0].description}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+
+              {/* 5-Day Forecast */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">5-Day Forecast</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {forecast.list
+                    .filter((item, index) => index % 8 === 0) // Take every 8th item (24 hours apart)
+                    .slice(0, 5)
+                    .map((item, index) => (
+                    <div key={`day-${index}`} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        {new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}
+                      </div>
+                      <div className="flex justify-center mb-2">
+                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
+                      </div>
+                      <div className="font-semibold text-gray-900 dark:text-white">
+                        {Math.round(item.main.temp)}°C
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                        {item.weather[0].description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
         </div>
       </main>
