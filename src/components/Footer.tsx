@@ -1,36 +1,35 @@
-import { Github, Linkedin } from "lucide-react"
+import { Github, Linkedin } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="mt-auto border-t border-border bg-card">
+    <footer className="mt-auto border-t border-border bg-background">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="flex items-center space-x-6">
+        <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
+          <p className="text-sm text-muted-foreground">
+            Built with ❤️ by <span className="font-medium text-foreground">Your Name</span>
+          </p>
+          <div className="flex items-center space-x-4">
             <a
-              href="https://github.com/harivignesh33"
+              href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="GitHub"
             >
-              <Github className="h-5 w-5 transition-transform group-hover:scale-110" />
-              <span className="text-sm font-medium">GitHub</span>
+              <Github className="h-5 w-5" />
             </a>
-            <div className="h-4 w-px bg-border" />
             <a
-              href="https://linkedin.com/in/hari-k"
+              href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center space-x-2 text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="LinkedIn"
             >
-              <Linkedin className="h-5 w-5 transition-transform group-hover:scale-110" />
-              <span className="text-sm font-medium">LinkedIn</span>
+              <Linkedin className="h-5 w-5" />
             </a>
           </div>
-          <p className="text-xs text-muted-foreground text-center">
-            Built with ❤️ using Next.js and OpenWeatherMap API
-          </p>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
