@@ -142,17 +142,17 @@ export const WeatherApp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 dark:from-gray-900 dark:to-gray-800 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-blue-600 dark:from-gray-900 dark:via-purple-900 dark:to-gray-800 flex flex-col">
       {/* Header with Theme Toggle */}
-      <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Weather App</h1>
+      <header className="p-4 flex justify-between items-center backdrop-blur-md bg-white/10 dark:bg-black/10 border-b border-white/20">
+        <h1 className="text-2xl font-bold text-white drop-shadow-lg">Weather App</h1>
         <ThemeToggle />
       </header>
 
-      <main className="flex-1 p-4">
-        <div className="max-w-4xl mx-auto">
+      <main className="flex-1 p-4 flex items-center justify-center">
+        <div className="max-w-4xl w-full">
           {/* Search Form */}
-          <form onSubmit={handleSearch} className="mb-6">
+          <form onSubmit={handleSearch} className="mb-8">
             <div className="flex gap-2 max-w-md mx-auto">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -161,13 +161,13 @@ export const WeatherApp = () => {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Enter city name..."
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl backdrop-blur-md bg-white/20 dark:bg-black/20 border border-white/30 text-white placeholder-white/70 focus:ring-2 focus:ring-white/50 focus:border-transparent shadow-lg"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white rounded-lg transition-colors"
+                className="px-6 py-3 backdrop-blur-md bg-white/20 hover:bg-white/30 disabled:bg-white/10 text-white rounded-xl transition-all shadow-lg border border-white/30"
               >
                 {loading ? 'Loading...' : 'Search'}
               </button>
@@ -176,59 +176,59 @@ export const WeatherApp = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6 max-w-md mx-auto">
+            <div className="backdrop-blur-md bg-red-500/20 border border-red-400/30 text-red-100 px-4 py-3 rounded-xl mb-6 max-w-md mx-auto shadow-lg">
               {error}
             </div>
           )}
 
           {/* Current Weather */}
           {currentWeather && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+            <div className="backdrop-blur-md bg-white/20 dark:bg-black/20 rounded-2xl shadow-2xl p-6 mb-6 border border-white/30">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-gray-500" />
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <MapPin className="w-5 h-5 text-white/80" />
+                  <h2 className="text-xl font-semibold text-white drop-shadow-md">
                     {currentWeather.name}, {currentWeather.sys.country}
                   </h2>
                 </div>
-                {getWeatherIcon(currentWeather.weather[0].icon, "w-8 h-8")}
+                {getWeatherIcon(currentWeather.weather[0].icon, "w-8 h-8 text-white drop-shadow-md")}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                <div className="text-center backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                  <div className="text-3xl font-bold text-white mb-1 drop-shadow-md">
                     {Math.round(currentWeather.main.temp)}°C
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                  <div className="text-sm text-white/80 capitalize">
                     {currentWeather.weather[0].description}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Thermometer className="w-4 h-4 text-gray-500" />
+                <div className="flex items-center gap-2 backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                  <Thermometer className="w-4 h-4 text-white/80" />
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Feels like</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">
+                    <div className="text-sm text-white/80">Feels like</div>
+                    <div className="font-semibold text-white">
                       {Math.round(currentWeather.main.feels_like)}°C
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Droplets className="w-4 h-4 text-gray-500" />
+                <div className="flex items-center gap-2 backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                  <Droplets className="w-4 h-4 text-white/80" />
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Humidity</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">
+                    <div className="text-sm text-white/80">Humidity</div>
+                    <div className="font-semibold text-white">
                       {currentWeather.main.humidity}%
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Wind className="w-4 h-4 text-gray-500" />
+                <div className="flex items-center gap-2 backdrop-blur-sm bg-white/10 rounded-xl p-4 border border-white/20">
+                  <Wind className="w-4 h-4 text-white/80" />
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Wind Speed</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">
+                    <div className="text-sm text-white/80">Wind Speed</div>
+                    <div className="font-semibold text-white">
                       {currentWeather.wind.speed} m/s
                     </div>
                   </div>
@@ -241,24 +241,24 @@ export const WeatherApp = () => {
           {forecast && (
             <>
               {/* 5-Hour Forecast */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">5-Hour Forecast</h3>
+              <div className="backdrop-blur-md bg-white/20 dark:bg-black/20 rounded-2xl shadow-2xl p-6 mb-6 border border-white/30">
+                <h3 className="text-lg font-semibold text-white mb-4 drop-shadow-md">5-Hour Forecast</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {forecast.list.slice(0, 5).map((item, index) => (
-                    <div key={`hour-${index}`} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    <div key={`hour-${index}`} className="text-center p-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20">
+                      <div className="text-sm text-white/80 mb-2">
                         {new Date(item.dt * 1000).toLocaleTimeString('en-US', { 
                           hour: 'numeric', 
                           hour12: true 
                         })}
                       </div>
                       <div className="flex justify-center mb-2">
-                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
+                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6 text-white")}
                       </div>
-                      <div className="font-semibold text-gray-900 dark:text-white">
+                      <div className="font-semibold text-white">
                         {Math.round(item.main.temp)}°C
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                      <div className="text-xs text-white/70 capitalize">
                         {item.weather[0].description}
                       </div>
                     </div>
@@ -267,24 +267,24 @@ export const WeatherApp = () => {
               </div>
 
               {/* 5-Day Forecast */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">5-Day Forecast</h3>
+              <div className="backdrop-blur-md bg-white/20 dark:bg-black/20 rounded-2xl shadow-2xl p-6 border border-white/30">
+                <h3 className="text-lg font-semibold text-white mb-4 drop-shadow-md">5-Day Forecast</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {forecast.list
                     .filter((item, index) => index % 8 === 0) // Take every 8th item (24 hours apart)
                     .slice(0, 5)
                     .map((item, index) => (
-                    <div key={`day-${index}`} className="text-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    <div key={`day-${index}`} className="text-center p-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20">
+                      <div className="text-sm text-white/80 mb-2">
                         {new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}
                       </div>
                       <div className="flex justify-center mb-2">
-                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
+                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6 text-white")}
                       </div>
-                      <div className="font-semibold text-gray-900 dark:text-white">
+                      <div className="font-semibold text-white">
                         {Math.round(item.main.temp)}°C
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                      <div className="text-xs text-white/70 capitalize">
                         {item.weather[0].description}
                       </div>
                     </div>
