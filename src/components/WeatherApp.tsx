@@ -144,9 +144,12 @@ export const WeatherApp = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-blue-600 dark:from-gray-900 dark:via-purple-900 dark:to-gray-800 flex flex-col">
       {/* Header with Theme Toggle */}
-      <header className="p-4 flex justify-between items-center backdrop-blur-md bg-black/20 border-b border-white/20">
-        <h1 className="text-2xl font-bold text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]">Weather App</h1>
-        <ThemeToggle />
+      <header className="p-4 grid grid-cols-3 items-center backdrop-blur-md bg-black/20 border-b border-white/20">
+        <div></div>
+        <h1 className="text-2xl font-bold text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] text-center">Weather App</h1>
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
       </header>
 
       <main className="flex-1 p-4 flex items-center justify-center">
