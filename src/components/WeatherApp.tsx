@@ -158,7 +158,7 @@ export const WeatherApp = () => {
                 <Sun className="w-5 h-5 text-white" />
               </div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                Weather Dashboard
+                WeatherLux
               </h1>
             </div>
             <ThemeToggle />
