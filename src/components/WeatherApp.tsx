@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, MapPin, Sun, Cloud, CloudRain, Snowflake, Wind, Eye, Droplets, Thermometer } from 'lucide-react';
+import { Search, MapPin, Sun, Cloud, CloudRain, Snowflake, Wind, Eye, Droplets, Thermometer, Gauge, CloudDrizzle, CloudSnow, CloudLightning, Navigation } from 'lucide-react';
 import { Footer } from './Footer';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -23,9 +23,12 @@ interface WeatherData {
   visibility: number;
   wind: {
     speed: number;
+    deg?: number;
   };
   sys: {
     country: string;
+    sunrise: number;
+    sunset: number;
   };
 }
 
@@ -56,26 +59,26 @@ export const WeatherApp = () => {
 
   const getWeatherIcon = (iconCode: string, className: string = "w-6 h-6") => {
     const iconMap: { [key: string]: JSX.Element } = {
-      '01d': <Sun className={className} />,
-      '01n': <Sun className={className} />,
-      '02d': <Cloud className={className} />,
-      '02n': <Cloud className={className} />,
-      '03d': <Cloud className={className} />,
-      '03n': <Cloud className={className} />,
-      '04d': <Cloud className={className} />,
-      '04n': <Cloud className={className} />,
-      '09d': <CloudRain className={className} />,
-      '09n': <CloudRain className={className} />,
-      '10d': <CloudRain className={className} />,
-      '10n': <CloudRain className={className} />,
-      '11d': <CloudRain className={className} />,
-      '11n': <CloudRain className={className} />,
-      '13d': <Snowflake className={className} />,
-      '13n': <Snowflake className={className} />,
-      '50d': <Wind className={className} />,
-      '50n': <Wind className={className} />,
+      '01d': <Sun className={`${className} text-amber-400`} />,
+      '01n': <Sun className={`${className} text-slate-300`} />,
+      '02d': <Cloud className={`${className} text-gray-400`} />,
+      '02n': <Cloud className={`${className} text-slate-400`} />,
+      '03d': <Cloud className={`${className} text-gray-500`} />,
+      '03n': <Cloud className={`${className} text-slate-500`} />,
+      '04d': <Cloud className={`${className} text-gray-600`} />,
+      '04n': <Cloud className={`${className} text-slate-600`} />,
+      '09d': <CloudDrizzle className={`${className} text-blue-400`} />,
+      '09n': <CloudDrizzle className={`${className} text-blue-500`} />,
+      '10d': <CloudRain className={`${className} text-blue-500`} />,
+      '10n': <CloudRain className={`${className} text-blue-600`} />,
+      '11d': <CloudLightning className={`${className} text-purple-500`} />,
+      '11n': <CloudLightning className={`${className} text-purple-600`} />,
+      '13d': <CloudSnow className={`${className} text-blue-200`} />,
+      '13n': <CloudSnow className={`${className} text-blue-300`} />,
+      '50d': <Wind className={`${className} text-gray-400`} />,
+      '50n': <Wind className={`${className} text-slate-400`} />,
     };
-    return iconMap[iconCode] || <Sun className={className} />;
+    return iconMap[iconCode] || <Sun className={`${className} text-amber-400`} />;
   };
 
   const fetchWeatherData = useCallback(async (cityName: string) => {
@@ -130,10 +133,13 @@ export const WeatherApp = () => {
 
   if (!API_KEY) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full text-center">
-          <h2 className="text-xl font-bold text-red-600 mb-2">Configuration Required</h2>
-          <p className="text-gray-600 dark:text-gray-300">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 max-w-md w-full text-center border border-white/20">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Wind className="w-8 h-8 text-red-600 dark:text-red-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-3">Configuration Required</h2>
+          <p className="text-slate-600 dark:text-slate-300">
             Please add your OpenWeatherMap API key to the environment variables.
           </p>
         </div>
@@ -142,161 +148,216 @@ export const WeatherApp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-blue-600 dark:from-gray-900 dark:via-purple-900 dark:to-gray-800 flex flex-col">
-      {/* Header with Theme Toggle */}
-      <header className="p-4 grid grid-cols-3 items-center backdrop-blur-md bg-black/20 border-b border-white/20">
-        <div></div>
-        <h1 className="text-2xl font-bold text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] text-center">Weather App</h1>
-        <div className="flex justify-end">
-          <ThemeToggle />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-500">
+      {/* Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+                <Sun className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+                Weather Dashboard
+              </h1>
+            </div>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
-      <main className="flex-1 p-4 flex items-center justify-center">
-        <div className="max-w-4xl w-full">
-          {/* Search Form */}
-          <form onSubmit={handleSearch} className="mb-8">
-            <div className="flex gap-2 max-w-md mx-auto">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300 w-4 h-4" />
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Enter city name..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl backdrop-blur-md bg-black/30 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-white/50 focus:border-transparent shadow-lg"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-3 backdrop-blur-md bg-black/30 hover:bg-black/40 disabled:bg-black/20 text-white rounded-xl transition-all shadow-lg border border-white/30"
-              >
-                {loading ? 'Loading...' : 'Search'}
-              </button>
-            </div>
-          </form>
-
-          {/* Error Message */}
-          {error && (
-            <div className="backdrop-blur-md bg-red-600/80 border border-red-400/50 text-white px-4 py-3 rounded-xl mb-6 max-w-md mx-auto shadow-lg">
-              {error}
-            </div>
-          )}
-
-          {/* Current Weather */}
-          {currentWeather && (
-            <div className="backdrop-blur-md bg-black/30 rounded-2xl shadow-2xl p-6 mb-6 border border-white/20">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-gray-200" />
-                  <h2 className="text-xl font-semibold text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]">
-                    {currentWeather.name}, {currentWeather.sys.country}
-                  </h2>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search Section */}
+        <div className="mb-8">
+          <div className="max-w-2xl mx-auto">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="flex gap-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Search for a city..."
+                    className="w-full pl-12 pr-4 py-4 text-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-lg hover:shadow-xl"
+                  />
                 </div>
-                {getWeatherIcon(currentWeather.weather[0].icon, "w-8 h-8 text-yellow-300 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]")}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold rounded-2xl transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {loading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Searching...</span>
+                    </div>
+                  ) : (
+                    'Search'
+                  )}
+                </button>
               </div>
+            </form>
+          </div>
+        </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center backdrop-blur-sm bg-black/40 rounded-xl p-4 border border-white/20">
-                  <div className="text-3xl font-bold text-white mb-1 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]">
-                    {Math.round(currentWeather.main.temp)}°C
-                  </div>
-                  <div className="text-sm text-gray-200 capitalize">
-                    {currentWeather.weather[0].description}
-                  </div>
+        {/* Error Message */}
+        {error && (
+          <div className="max-w-2xl mx-auto mb-8">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 shadow-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-red-100 dark:bg-red-800/50 rounded-full flex items-center justify-center">
+                  <Wind className="w-4 h-4 text-red-600 dark:text-red-400" />
                 </div>
+                <p className="text-red-800 dark:text-red-200 font-medium">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
-                <div className="flex items-center gap-2 backdrop-blur-sm bg-black/40 rounded-xl p-4 border border-white/20">
-                  <Thermometer className="w-4 h-4 text-gray-200" />
-                  <div>
-                    <div className="text-sm text-gray-300">Feels like</div>
-                    <div className="font-semibold text-white">
-                      {Math.round(currentWeather.main.feels_like)}°C
+        {/* Current Weather */}
+        {currentWeather && (
+          <div className="mb-8">
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <MapPin className="w-6 h-6 opacity-80" />
+                    <div>
+                      <h2 className="text-2xl font-bold">
+                        {currentWeather.name}, {currentWeather.sys.country}
+                      </h2>
+                      <p className="text-blue-100 capitalize">
+                        {currentWeather.weather[0].description}
+                      </p>
                     </div>
                   </div>
+                  {getWeatherIcon(currentWeather.weather[0].icon, "w-16 h-16")}
+                </div>
+              </div>
+
+              {/* Main Temperature */}
+              <div className="p-6">
+                <div className="text-center mb-8">
+                  <div className="text-6xl font-light text-slate-900 dark:text-white mb-2">
+                    {Math.round(currentWeather.main.temp)}°
+                  </div>
+                  <div className="text-xl text-slate-600 dark:text-slate-400">
+                    Feels like {Math.round(currentWeather.main.feels_like)}°C
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2 backdrop-blur-sm bg-black/40 rounded-xl p-4 border border-white/20">
-                  <Droplets className="w-4 h-4 text-blue-300" />
-                  <div>
-                    <div className="text-sm text-gray-300">Humidity</div>
-                    <div className="font-semibold text-white">
+                {/* Weather Details Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-2xl p-4 text-center">
+                    <Droplets className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                    <div className="text-2xl font-semibold text-slate-900 dark:text-white">
                       {currentWeather.main.humidity}%
                     </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">Humidity</div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 backdrop-blur-sm bg-black/40 rounded-xl p-4 border border-white/20">
-                  <Wind className="w-4 h-4 text-gray-200" />
-                  <div>
-                    <div className="text-sm text-gray-300">Wind Speed</div>
-                    <div className="font-semibold text-white">
-                      {currentWeather.wind.speed} m/s
+                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-2xl p-4 text-center">
+                    <Wind className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+                    <div className="text-2xl font-semibold text-slate-900 dark:text-white">
+                      {currentWeather.wind.speed}
                     </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">m/s Wind</div>
+                  </div>
+
+                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-2xl p-4 text-center">
+                    <Gauge className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                    <div className="text-2xl font-semibold text-slate-900 dark:text-white">
+                      {currentWeather.main.pressure}
+                    </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">hPa</div>
+                  </div>
+
+                  <div className="bg-slate-50 dark:bg-slate-700/50 rounded-2xl p-4 text-center">
+                    <Eye className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+                    <div className="text-2xl font-semibold text-slate-900 dark:text-white">
+                      {Math.round(currentWeather.visibility / 1000)}
+                    </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">km Visibility</div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* 5-Hour and 5-Day Forecast */}
-          {forecast && (
-            <>
-              {/* 5-Hour Forecast */}
-              <div className="backdrop-blur-md bg-black/30 rounded-2xl shadow-2xl p-6 mb-6 border border-white/20">
-                <h3 className="text-lg font-semibold text-white mb-4 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]">5-Hour Forecast</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                  {forecast.list.slice(0, 5).map((item, index) => (
-                    <div key={`hour-${index}`} className="text-center p-3 rounded-xl backdrop-blur-sm bg-black/40 border border-white/20">
-                      <div className="text-sm text-gray-300 mb-2">
+        {/* Forecasts */}
+        {forecast && (
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Hourly Forecast */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 p-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
+                <div className="w-2 h-8 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full mr-3"></div>
+                Next 24 Hours
+              </h3>
+              <div className="space-y-3">
+                {forecast.list.slice(0, 8).map((item, index) => (
+                  <div key={`hour-${index}`} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <div className="flex items-center space-x-4 flex-1">
+                      <div className="text-slate-600 dark:text-slate-400 w-16">
                         {new Date(item.dt * 1000).toLocaleTimeString('en-US', { 
                           hour: 'numeric', 
                           hour12: true 
                         })}
                       </div>
-                      <div className="flex justify-center mb-2">
-                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6 text-yellow-300")}
-                      </div>
-                      <div className="font-semibold text-white">
-                        {Math.round(item.main.temp)}°C
-                      </div>
-                      <div className="text-xs text-gray-300 capitalize">
-                        {item.weather[0].description}
+                      {getWeatherIcon(item.weather[0].icon, "w-6 h-6")}
+                      <div className="flex-1">
+                        <div className="text-sm text-slate-600 dark:text-slate-400 capitalize">
+                          {item.weather[0].description}
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="text-lg font-semibold text-slate-900 dark:text-white">
+                      {Math.round(item.main.temp)}°C
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              {/* 5-Day Forecast */}
-              <div className="backdrop-blur-md bg-black/30 rounded-2xl shadow-2xl p-6 border border-white/20">
-                <h3 className="text-lg font-semibold text-white mb-4 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]">5-Day Forecast</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                  {forecast.list
-                    .filter((item, index) => index % 8 === 0) // Take every 8th item (24 hours apart)
-                    .slice(0, 5)
-                    .map((item, index) => (
-                    <div key={`day-${index}`} className="text-center p-3 rounded-xl backdrop-blur-sm bg-black/40 border border-white/20">
-                      <div className="text-sm text-gray-300 mb-2">
-                        {new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}
+            {/* Daily Forecast */}
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 p-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center">
+                <div className="w-2 h-8 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full mr-3"></div>
+                5-Day Forecast
+              </h3>
+              <div className="space-y-4">
+                {forecast.list
+                  .filter((item, index) => index % 8 === 0)
+                  .slice(0, 5)
+                  .map((item, index) => (
+                  <div key={`day-${index}`} className="flex items-center justify-between p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <div className="flex items-center space-x-4 flex-1">
+                      <div className="text-slate-900 dark:text-white font-medium w-20">
+                        {index === 0 ? 'Today' : new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}
                       </div>
-                      <div className="flex justify-center mb-2">
-                        {getWeatherIcon(item.weather[0].icon, "w-6 h-6 text-yellow-300")}
-                      </div>
-                      <div className="font-semibold text-white">
-                        {Math.round(item.main.temp)}°C
-                      </div>
-                      <div className="text-xs text-gray-300 capitalize">
-                        {item.weather[0].description}
+                      {getWeatherIcon(item.weather[0].icon, "w-8 h-8")}
+                      <div className="flex-1">
+                        <div className="text-slate-600 dark:text-slate-400 capitalize">
+                          {item.weather[0].description}
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="text-right">
+                      <div className="text-xl font-semibold text-slate-900 dark:text-white">
+                        {Math.round(item.main.temp)}°C
+                      </div>
+                      <div className="text-sm text-slate-500 dark:text-slate-400">
+                        {Math.round(item.main.temp_min)}° / {Math.round(item.main.temp_max)}°
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <Footer />
