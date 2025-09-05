@@ -1,49 +1,61 @@
 "use client";
 
-import { useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
 export const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [mounted, setMounted] = useState(false);
 
-  const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
+  useEffect(() => {
+    // Get initial theme from localStorage or system preference
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const initialTheme = savedTheme || systemTheme;
     
-    if (newTheme) {
+    setTheme(initialTheme);
+    applyTheme(initialTheme);
+    setMounted(true);
+  }, []);
+
+  const applyTheme = (newTheme: 'light' | 'dark') => {
+    if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
   };
 
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <button
+        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all duration-200 hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        aria-label="Toggle theme"
+      >
+        <div className="h-4 w-4" />
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={toggleTheme}
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      className={`
-        relative w-12 h-12 rounded-full p-3 transition-all duration-300 ease-in-out
-        hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring
-        ${isDark 
-          ? 'bg-secondary hover:bg-secondary/80 text-secondary-foreground' 
-          : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-        }
-      `}
+      className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95"
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
     >
-      <div className="relative w-full h-full flex items-center justify-center">
-        <Sun 
-          className={`
-            absolute w-5 h-5 transition-all duration-300 ease-in-out
-            ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}
-          `}
-        />
-        <Moon 
-          className={`
-            absolute w-5 h-5 transition-all duration-300 ease-in-out
-            ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}
-          `}
-        />
-      </div>
+      {theme === 'light' ? (
+        <Moon className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
+      ) : (
+        <Sun className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
+      )}
     </button>
   );
 };
