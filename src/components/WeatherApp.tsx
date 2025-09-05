@@ -58,7 +58,7 @@ export const WeatherApp = () => {
   const API_KEY = 'd0a10016d43b599ee1b636c5cacf4354';
 
   const getWeatherIcon = (iconCode: string, className: string = "w-6 h-6") => {
-    const iconMap: { [key: string]: JSX.Element } = {
+    const iconMap: { [key: string]: React.ReactElement } = {
       '01d': <Sun className={`${className} text-amber-400`} />,
       '01n': <Sun className={`${className} text-slate-300`} />,
       '02d': <Cloud className={`${className} text-gray-400`} />,
